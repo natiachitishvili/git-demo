@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ka">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Java + OOP ინტერაქტიული ტესტი — 40 კითხვა</title>
+    <style>
+      :root {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12pt;
+      }
+      body {
+        max-width: 900px;
+        margin: 24px auto;
+        padding: 18px;
+        line-height: 1.5;
+        color: #111;
+      }
+      h1 {
+        font-size: 14pt;
+        margin-bottom: 6px;
+      }
+      .question {
+        margin: 12px 0;
+        padding: 10px;
+        border-radius: 8px;
+      }
+      .opts {
+        margin-top: 6px;
+      }
+      label {
+        display: block;
+        cursor: pointer;
+        padding: 3px 6px;
+        border-radius: 6px;
+      }
+      input[type="radio"] {
+        margin-right: 8px;
+      }
+      button {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background: #f6f6f6;
+        cursor: pointer;
+      }
+      .result {
+        margin-top: 18px;
+        padding: 12px;
+        border-radius: 8px;
+        background: #f3fff2;
+        border: 1px solid #cfe9d1;
+      }
+      .wrong {
+        background: #fff6f6;
+        border: 1px solid #f0c2c2;
+      }
+      .correct-answer {
+        font-weight: 600;
+      }
+      .small {
+        font-size: 11pt;
+        color: #444;
+      }
+      footer {
+        margin-top: 22px;
+        font-size: 11pt;
+        color: #666;
+      }
+      .controls {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Java + OOP — ინტერაქტიული ტესტი (40 შეკითხვა)</h1>
+    <p class="small">
+      პასუხები მონიშნე, შემდეგ დააჭირე "გახსნა შედეგი". შედეგში დაინახავ ქულას
+      და იმ კითხვებს, სადაც სწორ პასუხს არ დააჭირე.
+    </p>
+
+    <form id="quiz"></form>
+
+    <div class="controls">
+      <button id="submitBtn" type="button">გახსნა შედეგი</button>
+      <button id="resetBtn" type="button">გათავისუფლება</button>
+      <button id="showAnswersBtn" type="button">სწორი პასუხების ჩვენება</button>
+    </div>
+
+    <div id="output"></div>
+
+    <footer>
+      შეგიძლია ფაილი შეინახო როგორც <code>index.html</code> და გახსნა ბრაუზერში.
+    </footer>
+
+    <script>
+      const questions = [
+        {
+          q: "1. რომელი modifier-ი გამოიყენება, რათა ცვლადი ხელმისაწვდომი იყოს მხოლოდ იმავე კლასში?",
+          opts: ["public", "private", "protected", "default"],
+          ans: 1,
+        },
+        {
+          q: "2. რომელი კოდია სწორი constructor Java-ში?",
+          opts: [
+            "void Person() {}",
+            "Person() {}",
+            "public void Person() {}",
+            "static Person() {}",
+          ],
+          ans: 1,
+        },
+        {
+          q: "3. რომელი პრინციპია დაკავშირებული მონაცემების დაფარვასთან?",
+          opts: ["Inheritance", "Encapsulation", "Abstraction", "Polymorphism"],
+          ans: 1,
+        },
+        {
+          q: "4. რომელი keyword გამოიყენება superclass-ის constructor-ის გამოსაძახებლად?",
+          opts: ["super", "this", "parent", "extends"],
+          ans: 0,
+        },
+        {
+          q: "5. რომელი განცხადებაა სწორი OOP-ის პრინციპების შესახებ?",
+          opts: [
+            "Java მხარს უჭერს multiple inheritance-ს კლასების დონეზე",
+            "Abstract class შეიძლება შეიცავდეს both abstract და non-abstract მეთოდებს",
+            "Interface-ს არ შეუძლია ჰქონდეს default მეთოდი",
+            "Constructor შეიძლება იყოს abstract",
+          ],
+          ans: 1,
+        },
+        {
+          q: "6. რომელი ტიპი არ არის primitive Java-ში?",
+          opts: ["int", "boolean", "String", "double"],
+          ans: 2,
+        },
+        {
+          q: '7. რა დაბეჭდავს ეს კოდი? System.out.println(5 + "5");',
+          opts: ["10", "55", "შეცდომა", "null"],
+          ans: 1,
+        },
+        {
+          q: "8. რომელ შემთხვევაში ხდება method overriding?",
+          opts: [
+            "როცა ერთი მეთოდი შეიცავს განსხვავებულ სახელწოდებას",
+            "როცა მეთოდს აქვს იგივე სახელი და პარამეტრები subclass-ში",
+            "როცა მეთოდს აქვს იგივე სახელი მაგრამ სხვა ტიპი",
+            "როცა კლასს არ აქვს constructor",
+          ],
+          ans: 1,
+        },
+        {
+          q: "9. რომელი keyword-ით განისაზღვრება Interface Java-ში?",
+          opts: ["abstract", "class", "interface", "implements"],
+          ans: 2,
+        },
+        {
+          q: "10. რომელი Modifier-ი საშუალებას აძლევს კლასს იყოს ხელმისაწვდომი მთელ პროექტში?",
+          opts: ["private", "protected", "public", "final"],
+          ans: 2,
+        },
+
+        {
+          q: "11. რამდენი constructor შეიძლება ჰქონდეს ერთ კლასს?",
+          opts: [
+            "მხოლოდ ერთი",
+            "რამდენიც გვინდა, თუ განსხვავებული პარამეტრები აქვთ",
+            "მხოლოდ public",
+            "ორი",
+          ],
+          ans: 1,
+        },
+        {
+          q: "12. რომელი სიტყვაა გამოყენებული კლასისგან ობიექტის შესაქმნელად?",
+          opts: ["make", "build", "new", "create"],
+          ans: 2,
+        },
+        {
+          q: "13. რომელი keyword გამოიყენება მემკვიდრეობისთვის?",
+          opts: ["implements", "inherits", "extends", "include"],
+          ans: 2,
+        },
+        {
+          q: "14. რა არის კლასის შიგნით აღწერილი მეთოდი?",
+          opts: ["function", "property", "constructor", "member"],
+          ans: 3,
+        },
+        {
+          q: "15. რომელი პრინციპია დაკავშირებული ერთი სახელის ქვეშ სხვადასხვა ქცევასთან?",
+          opts: ["Abstraction", "Inheritance", "Polymorphism", "Encapsulation"],
+          ans: 2,
+        },
+        {
+          q: "16. რას ნიშნავს `static` keyword?",
+          opts: [
+            "ობიექტზე დამოკიდებული ცვლადი",
+            "მეთიოდი ეკუთვნის კლასს და არა ობიექტს",
+            "ნიშნისია იცვლება დინამიკურად",
+            "ცვლადი ინახება heap-ზე",
+          ],
+          ans: 1,
+        },
+        {
+          q: "17. რომელი ოპერატორი გამოიყენება ობიექტების შედარებისთვის მნიშვნელობით?",
+          opts: ["==", "equals()", "=", "!="],
+          ans: 1,
+        },
+        {
+          q: "18. თუ კლასი აქვს private constructor, რა შეგვიძლია ვთქვათ?",
+          opts: [
+            "მას არ შეიძლება ჰქონდეს მეთოდები",
+            "მისი ობიექტის შექმნა სხვა კლასიდან შეუძლებელია",
+            "იგი public ხდება ავტომატურად",
+            "ის აბსტრაქტულია",
+          ],
+          ans: 1,
+        },
+        {
+          q: "19. რას ნიშნავს final keyword კლასზე?",
+          opts: [
+            "არ შეიძლება მემკვიდრეობა",
+            "არ შეიძლება new ობიექტის შექმნა",
+            "არ შეიძლება მეთოდების დაწერა",
+            "კლასი ყოველთვის static-ია",
+          ],
+          ans: 0,
+        },
+        {
+          q: "20. რომელი keyword გამოიყენება interface-ის იმპლემენტაციისთვის?",
+          opts: ["uses", "implements", "extends", "interface"],
+          ans: 1,
+        },
+
+        {
+          q: "21. რა არის default მნიშვნელობა boolean-ისთვის?",
+          opts: ["true", "false", "0", "null"],
+          ans: 1,
+        },
+        {
+          q: "22. რას აკეთებს `this` keyword?",
+          opts: [
+            "მიუთითებს მიმდინარე ობიექტზე",
+            "იძახებს მშობლის constructor-ს",
+            "ქმნის ახალ ობიექტს",
+            "ცვლის კლასის სახელს",
+          ],
+          ans: 0,
+        },
+        {
+          q: "23. რომელია სწორი მეთოდის დეკლარაცია?",
+          opts: [
+            "method public void test()",
+            "void test()",
+            "function test()",
+            "def test()",
+          ],
+          ans: 1,
+        },
+        {
+          q: "24. რომელი Modifier-ით განისაზღვრება subclass-ის წვდომა ერთსა და იმავე package-ში?",
+          opts: ["public", "private", "protected", "default"],
+          ans: 3,
+        },
+        {
+          q: "25. რას ნიშნავს `abstract` მეთოდი?",
+          opts: [
+            "უკვე განხორციელებული",
+            "აღწერილი სხეულით",
+            "არ აქვს body და უნდა განხორციელდეს subclass-ში",
+            "შესაძლებელია იყოს static",
+          ],
+          ans: 2,
+        },
+        {
+          q: "26. რა არის difference `==` და `.equals()` შორის?",
+          opts: [
+            "ორივე ადარებს მნიშვნელობას",
+            "`==` ადარებს reference-ს, `.equals()` მნიშვნელობას",
+            "ორივე ადარებს reference-ს",
+            "`.equals()` მხოლოდ primitive-ებზე მუშაობს",
+          ],
+          ans: 1,
+        },
+        {
+          q: "27. რომელი keyword გამოიყენება აბსტრაქტული კლასის შესაქმნელად?",
+          opts: ["interface", "abstract", "virtual", "static"],
+          ans: 1,
+        },
+        {
+          q: "28. რას ნიშნავს “method overloading”?",
+          opts: [
+            "ერთი მეთოდი გამოძახებულია superclass-იდან",
+            "ერთი და იგივე მეთოდი სხვადასხვა პარამეტრებით",
+            "განსხვავებული სახელი ერთ კლასში",
+            "ერთი მეთოდი სხვადასხვა კლასში",
+          ],
+          ans: 1,
+        },
+        {
+          q: "29. რომელი ტიპი ინახავს სიმბოლოს?",
+          opts: ["char", "String", "boolean", "float"],
+          ans: 0,
+        },
+        {
+          q: "30. რა არის JVM?",
+          opts: [
+            "Java Version Manager",
+            "Java Virtual Machine",
+            "Java Variable Model",
+            "Java View Manager",
+          ],
+          ans: 1,
+        },
+
+        {
+          q: "31. რომელი keyword აჩერებს loop-ს?",
+          opts: ["skip", "exit", "break", "continue"],
+          ans: 2,
+        },
+        {
+          q: "32. რომელი exception წარმოიქმნება, როცა ვცდილობთ null ობიექტზე მეთოდის გამოძახებას?",
+          opts: [
+            "NullPointerException",
+            "ArrayIndexOutOfBoundsException",
+            "IOException",
+            "ArithmeticException",
+          ],
+          ans: 0,
+        },
+        {
+          q: "33. რომელი data type ინახავს მთელი რიცხვებს?",
+          opts: ["int", "double", "float", "boolean"],
+          ans: 0,
+        },
+        {
+          q: "34. რომელი Modifier-ი არ გამოიყენება მეთოდისთვის?",
+          opts: ["public", "private", "return", "protected"],
+          ans: 2,
+        },
+        {
+          q: "35. რას ნიშნავს “composition”?",
+          opts: [
+            "როცა ერთი კლასი შეიცავს სხვა კლასის ობიექტს",
+            "როცა ერთი კლასი extends-ს იყენებს",
+            "როცა ყველა მეთოდი static-ია",
+            "როცა კლასს არ აქვს constructor",
+          ],
+          ans: 0,
+        },
+        {
+          q: "36. რომელი keyword-ით შეიძლება მეთოდის overriding-ის თავიდან აცილება?",
+          opts: ["static", "final", "abstract", "this"],
+          ans: 1,
+        },
+        {
+          q: "37. რომელი exception წარმოიქმნება ნულზე გაყოფისას?",
+          opts: [
+            "ArithmeticException",
+            "NullPointerException",
+            "IOException",
+            "RuntimeException",
+          ],
+          ans: 0,
+        },
+        {
+          q: "38. რომელი პრინციპი მოიცავს “generalization–specialization” ურთიერთობას?",
+          opts: ["Encapsulation", "Inheritance", "Abstraction", "Polymorphism"],
+          ans: 1,
+        },
+        {
+          q: "39. რომელი ინსტრუმენტით ხდება კოდის კომპილაცია Java-ში?",
+          opts: ["jre", "jvm", "javac", "jlink"],
+          ans: 2,
+        },
+        {
+          q: "40. რომელი მეთოდი იძახება, როცა ობიექტი იქმნება?",
+          opts: ["main()", "create()", "constructor", "build()"],
+          ans: 2,
+        },
+      ];
+
+      const quizEl = document.getElementById("quiz");
+      const outputEl = document.getElementById("output");
+
+      function renderQuiz() {
+        quizEl.innerHTML = "";
+        questions.forEach((item, idx) => {
+          const div = document.createElement("div");
+          div.className = "question";
+          div.innerHTML = `<div><strong>${item.q}</strong></div>`;
+          const optsDiv = document.createElement("div");
+          optsDiv.className = "opts";
+          item.opts.forEach((opt, i) => {
+            const id = `q${idx}_opt${i}`;
+            const label = document.createElement("label");
+            label.setAttribute("for", id);
+            label.innerHTML = `<input type="radio" name="q${idx}" id="${id}" value="${i}"> ${opt}`;
+            optsDiv.appendChild(label);
+          });
+          div.appendChild(optsDiv);
+          quizEl.appendChild(div);
+        });
+      }
+
+      function grade() {
+        const answers = [];
+        let correct = 0;
+        const wrongList = [];
+        questions.forEach((q, idx) => {
+          const sel = document.querySelector(`input[name=q${idx}]:checked`);
+          const chosen = sel ? parseInt(sel.value, 10) : null;
+          answers.push(chosen);
+          if (chosen === q.ans) {
+            correct++;
+          } else {
+            wrongList.push({ idx, chosen, correctIdx: q.ans });
+          }
+        });
+        const percent = Math.round((correct / questions.length) * 100);
+        showResult(correct, percent, wrongList, answers);
+      }
+
+      function showResult(correct, percent, wrongList, answers) {
+        outputEl.innerHTML = "";
+        const resDiv = document.createElement("div");
+        resDiv.className = "result";
+        resDiv.innerHTML = `<div><strong>შენი ქულა: ${correct} / ${questions.length} (${percent}%)</strong></div>`;
+
+        if (wrongList.length === 0) {
+          resDiv.innerHTML += `<div style="margin-top:8px">გილოცავ — ყველა კითხვა სწორია ✅</div>`;
+        } else {
+          const list = document.createElement("div");
+          list.style.marginTop = "8px";
+          list.innerHTML = `<div><strong>ოთხი ცუდი/მოქმედ არასწორი პასუხი: </strong></div>`;
+          wrongList.forEach((w) => {
+            const q = questions[w.idx];
+            const item = document.createElement("div");
+            item.className = "wrong";
+            const chosenText =
+              w.chosen === null
+                ? "<em>არ არის მონიშნული</em>"
+                : q.opts[w.chosen];
+            item.innerHTML = `<div><strong>Q${w.idx + 1}:</strong> ${q.q}</div>
+                        <div class="small">თქვენი პასუხი: ${chosenText}</div>
+                        <div class="small correct-answer">სწორი პასუხი: ${
+                          q.opts[w.correctIdx]
+                        }</div>`;
+            list.appendChild(item);
+          });
+          resDiv.appendChild(list);
+        }
+
+        outputEl.appendChild(resDiv);
+        window.scrollTo({ top: outputEl.offsetTop - 20, behavior: "smooth" });
+      }
+
+      function showAnswers() {
+        // Reveal correct answers inline
+        questions.forEach((q, idx) => {
+          const labels = document.querySelectorAll(`input[name=q${idx}]`);
+          labels.forEach((inp) => {
+            const li = inp.closest("label");
+            li.style.fontWeight =
+              parseInt(inp.value, 10) === q.ans ? "600" : "normal";
+          });
+        });
+      }
+
+      function resetQuiz() {
+        document
+          .querySelectorAll("input[type=radio]")
+          .forEach((r) => (r.checked = false));
+        outputEl.innerHTML = "";
+        document
+          .querySelectorAll("label")
+          .forEach((l) => (l.style.fontWeight = "normal"));
+      }
+
+      // init
+      renderQuiz();
+
+      document.getElementById("submitBtn").addEventListener("click", grade);
+      document.getElementById("resetBtn").addEventListener("click", resetQuiz);
+      document
+        .getElementById("showAnswersBtn")
+        .addEventListener("click", showAnswers);
+    </script>
+  </body>
+</html>
